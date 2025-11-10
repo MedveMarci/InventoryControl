@@ -1,8 +1,9 @@
 # InventoryControl
-[![Version](https://img.shields.io/github/v/release/MrAfitol/InventoryControl?sort=semver&style=flat-square&color=blue&label=Version)](https://github.com/MrAfitol/InventoryControl/releases)
-[![Downloads](https://img.shields.io/github/downloads/MrAfitol/InventoryControl/total?style=flat-square&color=yellow&label=Downloads)](https://github.com/MrAfitol/InventoryControl/releases)
+[![Version](https://img.shields.io/github/v/release/MedveMarci/InventoryControl?sort=semver&label=Version)](https://github.com/MedveMarci/InventoryControl/releases)
+[![Downloads](https://img.shields.io/github/downloads/MedveMarci/InventoryControl/total?label=Downloads)](https://github.com/MedveMarci/InventoryControl/releases)
+<a href="https://github.com/KenleyundLeon/DeltaPatch"><img src="https://image2url.com/images/1759565889245-ff2e02c2-1f19-4f72-bc06-43a3b77fb4bd.png"></a>
 
-A plugin that allows you to configure the default role inventory
+An SCP:Secret Laboratory plugin which allows you to configure the default role inventory
 
 ## How download ?
    - *1. Find the SCP SL server config folder*
@@ -12,10 +13,6 @@ A plugin that allows you to configure the default role inventory
    - *2. Find the "LabAPI" folder there, it contains the "plugins" folder.*
   
    - *3. Select either the port of your server to install the same on that server or the "global" folder to install the plugin for all servers*
-  
-  ***Or***
-  
-   - *Run the command in console `p install MrAfitol/InventoryControl`*
 
 ## Config
 
@@ -126,80 +123,73 @@ ChaosMarauder
 
 **ItemType**
 ```
-KeycardJanitor,         
-KeycardScientist,       
-KeycardResearchCoordinator,
-KeycardZoneManager,     
-KeycardGuard,           
-KeycardMTFPrivate,      
-KeycardContainmentEngineer,
-KeycardMTFOperative,    
-KeycardMTFCaptain,      
-KeycardFacilityManager, 
-KeycardChaosInsurgency, 
-KeycardO5,              
-Radio,                  
-GunCOM15,               
-Medkit,                 
-Flashlight,             
-MicroHID,               
-SCP500,                 
-SCP207,                 
-Ammo12gauge,            
-GunE11SR,               
-GunCrossvec,            
-Ammo556x45,             
-GunFSP9,                
-GunLogicer,             
-GrenadeHE,              
-GrenadeFlash,           
-Ammo44cal,              
-Ammo762x39,             
-Ammo9x19,               
-GunCOM18,               
-SCP018,                 
-SCP268,                 
-Adrenaline,             
-Painkillers,            
-Coin,                   
-ArmorLight,             
-ArmorCombat,            
-ArmorHeavy,             
-GunRevolver,            
-GunAK,                  
-GunShotgun,             
-SCP330,                 
-SCP2176,                
-SCP244a,                
-SCP244b,                
-SCP1853,                
-ParticleDisruptor,      
-GunCom45,               
-SCP1576,                
-Jailbird,               
-AntiSCP207,             
-GunFRMG0,               
-GunA7,                  
-Lantern,                
-SCP1344,                
-Snowball,               
-Coal,                   
-SpecialCoal,            
-SCP1507Tape,            
-DebugRagdollMover,      
-SurfaceAccessPass,      
-GunSCP127,              
-KeycardCustomTaskForce, 
-KeycardCustomSite02,    
-KeycardCustomManagement,
+KeycardJanitor
+KeycardScientist
+KeycardResearchCoordinator
+KeycardZoneManager
+KeycardGuard
+KeycardMTFPrivate
+KeycardContainmentEngineer
+KeycardMTFOperative
+KeycardMTFCaptain
+KeycardFacilityManager
+KeycardChaosInsurgency
+KeycardO5
+Radio
+GunCOM15
+Medkit
+Flashlight
+MicroHID
+SCP500
+SCP207
+Ammo12gauge
+GunE11SR
+GunCrossvec
+Ammo556x45
+GunFSP9
+GunLogicer
+GrenadeHE
+GrenadeFlash
+Ammo44cal
+Ammo762x39
+Ammo9x19
+GunCOM18
+SCP018
+SCP268
+Adrenaline
+Painkillers
+Coin
+ArmorLight
+ArmorCombat
+ArmorHeavy
+GunRevolver
+GunAK
+GunShotgun
+SCP330
+SCP2176
+SCP244a
+SCP244b
+SCP1853
+ParticleDisruptor
+GunCom45
+SCP1576
+Jailbird
+AntiSCP207
+GunFRMG0
+GunA7
+Lantern
+SCP1344
+Snowball
+Coal
+SpecialCoal
+SCP1507Tape
+DebugRagdollMover
+SurfaceAccessPass
+GunSCP127
+KeycardCustomTaskForce
+KeycardCustomSite02
+KeycardCustomManagement
 KeycardCustomMetalCase
-```
-
-**AmmoType**
-```
-Ammo12gauge,
-Ammo556x45,
-Ammo44cal,
-Ammo762x39,
-Ammo9x19,
+MarshmallowItem
+SCP1509
 ```
