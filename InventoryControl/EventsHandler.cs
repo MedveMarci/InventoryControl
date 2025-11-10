@@ -1,115 +1,131 @@
-﻿using InventorySystem.Items;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using InventorySystem.Items.Firearms;
 using InventorySystem.Items.Firearms.Attachments;
 using InventorySystem.Items.Firearms.Modules;
 using LabApi.Events.Arguments.PlayerEvents;
-using LabApi.Features.Console;
 using LabApi.Features.Wrappers;
 using MEC;
 using PlayerRoles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Random = UnityEngine.Random;
 
-namespace InventoryControl
+namespace InventoryControl;
+
+public static class EventsHandler
 {
-    public class EventsHandler
+    public static void OnServerRoundStarted()
     {
-        public void OnPlayerChangedRole(PlayerChangedRoleEventArgs ev)
+        _ = VersionManager.CheckForUpdatesAsync(InventoryControl.Instance.Version);
+    }
+    
+    public static void OnPlayerChangedRole(PlayerChangedRoleEventArgs ev)
+    {
+        try
         {
-            try
-            {
-                if (!Round.IsRoundStarted || ev.Player == null || (ev.SpawnFlags == RoleSpawnFlags.None || ev.SpawnFlags == RoleSpawnFlags.UseSpawnpoint)) return;
+            if (!Round.IsRoundStarted || ev.Player == null || ev.SpawnFlags == RoleSpawnFlags.None ||
+                ev.SpawnFlags == RoleSpawnFlags.UseSpawnpoint) return;
 
-                Timing.CallDelayed(0.01f, () =>
-                {
-                    if (!ev.Player.IsDummy && InventoryControl.Instance.Config.InventoryRank?.Count > 0 && InventoryControl.Instance.Config.InventoryRank.ContainsKey(GetPlayerGroupName(ev.Player)))
-                        if (InventoryControl.Instance.Config.InventoryRank[GetPlayerGroupName(ev.Player)]?.Count(x => x.Value.RoleTypeId == ev.NewRole.RoleTypeId) > 0)
-                        { SetPlayerInventory(ev.Player, InventoryControl.Instance.Config.InventoryRank[GetPlayerGroupName(ev.Player)].Where(x => x.Value.RoleTypeId == ev.NewRole.RoleTypeId).ToList().RandomItem().Value); return; }
-                    if (InventoryControl.Instance.Config.Inventory?.Count(x => x.Value.RoleTypeId == ev.NewRole.RoleTypeId) > 0)
-                        SetPlayerInventory(ev.Player, InventoryControl.Instance.Config.Inventory.Where(x => x.Value.RoleTypeId == ev.NewRole.RoleTypeId).ToList().RandomItem().Value);
-                });
-            }
-            catch (Exception e)
+            Timing.CallDelayed(0.01f, () =>
             {
-                Logger.Error("[Event: OnPlayerChangedRole] " + e.ToString());
-            }
+                if (!ev.Player.IsDummy && InventoryControl.Instance.Config.InventoryRank?.Count > 0 &&
+                    InventoryControl.Instance.Config.InventoryRank.ContainsKey(GetPlayerGroupName(ev.Player)))
+                    if (InventoryControl.Instance.Config.InventoryRank[GetPlayerGroupName(ev.Player)]
+                            ?.Count(x => x.Value.RoleTypeId == ev.NewRole.RoleTypeId) > 0)
+                    {
+                        SetPlayerInventory(ev.Player,
+                            InventoryControl.Instance.Config.InventoryRank[GetPlayerGroupName(ev.Player)]
+                                .Where(x => x.Value.RoleTypeId == ev.NewRole.RoleTypeId).ToList().RandomItem().Value);
+                        return;
+                    }
+
+                if (InventoryControl.Instance.Config.Inventory?.Count(x =>
+                        x.Value.RoleTypeId == ev.NewRole.RoleTypeId) > 0)
+                    SetPlayerInventory(ev.Player,
+                        InventoryControl.Instance.Config.Inventory
+                            .Where(x => x.Value.RoleTypeId == ev.NewRole.RoleTypeId).ToList().RandomItem().Value);
+            });
         }
-
-        private void SetPlayerInventory(Player player, RoleInventory roleInventory)
+        catch (Exception e)
         {
-            try
+            LogManager.Error("[Event: OnPlayerChangedRole] " + e);
+        }
+    }
+
+    private static void SetPlayerInventory(Player player, RoleInventory roleInventory)
+    {
+        try
+        {
+            var Ammos = new Dictionary<ItemType, ushort>(player.Ammo);
+            if (!roleInventory.KeepItems && !player.IsWithoutItems) player.ClearInventory();
+            else player.ClearInventory(true, false);
+
+            Timing.CallDelayed(0.01f, () =>
             {
-                Dictionary<ItemType, ushort> Ammos = new Dictionary<ItemType, ushort>(player.Ammo);
-                if (!roleInventory.KeepItems && !player.IsWithoutItems) player.ClearInventory();
-                else player.ClearInventory(true, false);
+                if (roleInventory.Items?.Count > 0)
+                    foreach (var Item in roleInventory.Items)
+                        if (Item.Value >= Random.Range(0, 101))
+                        {
+                            var itemBase = player.AddItem(Item.Key).Base;
 
-                Timing.CallDelayed(0.01f, () =>
-                {
-                    if (roleInventory.Items?.Count > 0)
-                        foreach (KeyValuePair<ItemType, int> Item in roleInventory.Items)
-                            if (Item.Value >= Random.Range(0, 101))
+                            if (itemBase is Firearm firearm)
                             {
-                                ItemBase itemBase = player.AddItem(Item.Key).Base;
+                                if (AttachmentsServerHandler.PlayerPreferences.TryGetValue(player.ReferenceHub,
+                                        out var value) && value.TryGetValue(itemBase.ItemTypeId, out var value2))
+                                    firearm.ApplyAttachmentsCode(value2, true);
 
-                                if (itemBase is Firearm firearm)
+                                if (firearm.Modules.First(x => x is MagazineModule) is MagazineModule magazineModule)
                                 {
-                                    if (AttachmentsServerHandler.PlayerPreferences.TryGetValue(player.ReferenceHub, out var value) && value.TryGetValue(itemBase.ItemTypeId, out var value2))
-                                        firearm.ApplyAttachmentsCode(value2, reValidate: true);
-
-                                    if (firearm.Modules.First(x => x is MagazineModule) is MagazineModule magazineModule)
-                                    {
-                                        magazineModule.ServerInsertEmptyMagazine();
-                                        magazineModule.AmmoStored = magazineModule.AmmoMax;
-                                        magazineModule.ServerResyncData();
-                                    }
+                                    magazineModule.ServerInsertEmptyMagazine();
+                                    magazineModule.AmmoStored = magazineModule.AmmoMax;
+                                    magazineModule.ServerResyncData();
                                 }
                             }
+                        }
 
-                    if (roleInventory.KeepAmmos && Ammos?.Count > 0)
-                        foreach (KeyValuePair<ItemType, ushort> ammo in Ammos)
-                            player.SetAmmo(ammo.Key, ammo.Value);
+                if (roleInventory.KeepAmmos && Ammos?.Count > 0)
+                    foreach (var ammo in Ammos)
+                        player.SetAmmo(ammo.Key, ammo.Value);
 
-                    if (roleInventory.Ammos?.Count > 0)
-                        foreach (KeyValuePair<ItemType, int> Ammo in roleInventory.Ammos)
-                            if (IsAmmo(Ammo.Key)) player.AddAmmo(Ammo.Key, (ushort)Ammo.Value);
-                });
-
-            }
-            catch (Exception e)
-            {
-                Logger.Error("[Event: SetPlayerInventory] " + e.ToString());
-            }
+                if (!(roleInventory.Ammos?.Count > 0)) return;
+                foreach (var Ammo in roleInventory.Ammos)
+                    if (IsAmmo(Ammo.Key))
+                        player.AddAmmo(Ammo.Key, (ushort)Ammo.Value);
+            });
         }
-
-        private string GetPlayerGroupName(Player player)
+        catch (Exception e)
         {
-            try
-            {
-                if (player.UserId == null || player.IsDummy) return string.Empty;
-
-                if (ServerStatic.PermissionsHandler.Members.ContainsKey(player.UserId))
-                    return ServerStatic.PermissionsHandler.Members[player.UserId];
-                else
-                    return player.UserGroup != null ? ServerStatic.PermissionsHandler.Groups.First(g => EqualsTo(g.Value, player.UserGroup)).Key : string.Empty;
-            }
-            catch (Exception e)
-            {
-                Logger.Error("[InventoryControl] [Event: GetPlayerGroupName] " + e.ToString());
-                return string.Empty;
-            }
+            LogManager.Error("[Event: SetPlayerInventory] " + e);
         }
+    }
 
-        public static bool IsAmmo(ItemType type)
+    private static string GetPlayerGroupName(Player player)
+    {
+        try
         {
-            if (type == ItemType.Ammo9x19 || type == ItemType.Ammo762x39 || type == ItemType.Ammo556x45 || type == ItemType.Ammo44cal || type == ItemType.Ammo12gauge)
-                return true;
-            return false;
-        }
+            if (player.UserId == null || player.IsDummy) return string.Empty;
 
-        private bool EqualsTo(UserGroup check, UserGroup player)
-            => check.BadgeColor == player.BadgeColor
+            if (ServerStatic.PermissionsHandler.Members.TryGetValue(player.UserId, out var name))
+                return name;
+            return player.UserGroup != null
+                ? ServerStatic.PermissionsHandler.Groups.First(g => EqualsTo(g.Value, player.UserGroup)).Key
+                : string.Empty;
+        }
+        catch (Exception e)
+        {
+            LogManager.Error("[InventoryControl] [Event: GetPlayerGroupName] " + e);
+            return string.Empty;
+        }
+    }
+
+    private static bool IsAmmo(ItemType type)
+    {
+        return type is ItemType.Ammo9x19 or ItemType.Ammo762x39 or ItemType.Ammo556x45 or ItemType.Ammo44cal or ItemType.Ammo12gauge;
+    }
+
+    private static bool EqualsTo(UserGroup check, UserGroup player)
+    {
+        return check.BadgeColor == player.BadgeColor
                && check.BadgeText == player.BadgeText
                && check.Permissions == player.Permissions
                && check.Cover == player.Cover

@@ -1,106 +1,109 @@
-﻿using PlayerRoles;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
+using PlayerRoles;
 
-namespace InventoryControl
+namespace InventoryControl;
+
+public class Config
 {
-    public class Config
+    [Description("Enable debug messages in the console")]
+    public bool Debug { get; set; } = false;
+    
+    [Description(
+        "Custom inventory list for the role. (Do not add a role to the list if you want to leave the role as a regular inventory)")]
+    public Dictionary<string, RoleInventory> Inventory { get; set; } = new()
     {
-        [Description("Custom inventory list for the role. (Do not add a role to the list if you want to leave the role as a regular inventory)")]
-        public Dictionary<string, RoleInventory> Inventory { get; set; } = new Dictionary<string, RoleInventory>()
         {
+            "DefaultCassD", new RoleInventory
             {
-                "DefaultCassD", new RoleInventory()
+                RoleTypeId = RoleTypeId.ClassD,
+                KeepItems = false,
+                Items = new Dictionary<ItemType, int>
                 {
-                    RoleTypeId = RoleTypeId.ClassD,
-                    KeepItems = false,
-                    Items = new Dictionary<ItemType, int>()
-                    {
-                        { ItemType.Painkillers, 80 },
-                        { ItemType.Coin, 100 }
-                    }
+                    { ItemType.Painkillers, 80 },
+                    { ItemType.Coin, 100 }
                 }
-            },
+            }
+        },
+        {
+            "JanitorCassD", new RoleInventory
             {
-                "JanitorCassD", new RoleInventory()
+                RoleTypeId = RoleTypeId.ClassD,
+                KeepItems = false,
+                Items = new Dictionary<ItemType, int>
                 {
-                    RoleTypeId = RoleTypeId.ClassD,
-                    KeepItems = false,
-                    Items = new Dictionary<ItemType, int>()
-                    {
-                        { ItemType.KeycardJanitor, 35 },
-                        { ItemType.Painkillers, 80 },
-                        { ItemType.Coin, 100 }
-                    }
+                    { ItemType.KeycardJanitor, 35 },
+                    { ItemType.Painkillers, 80 },
+                    { ItemType.Coin, 100 }
                 }
-            },
+            }
+        },
+        {
+            "DefaultScientist", new RoleInventory
             {
-                "DefaultScientist", new RoleInventory()
+                RoleTypeId = RoleTypeId.Scientist,
+                KeepItems = true,
+                Items = new Dictionary<ItemType, int>
                 {
-                    RoleTypeId = RoleTypeId.Scientist,
-                    KeepItems = true,
-                    Items = new Dictionary<ItemType, int>()
+                    { ItemType.Flashlight, 100 },
+                    { ItemType.Coin, 90 }
+                }
+            }
+        }
+    };
+
+    [Description("Custom inventory list for players with a rank")]
+    public Dictionary<string, Dictionary<string, RoleInventory>> InventoryRank { get; set; } = new()
+    {
+        {
+            "owner", new Dictionary<string, RoleInventory>
+            {
+                {
+                    "OwnerCassD", new RoleInventory
                     {
-                        { ItemType.Flashlight, 100 },
-                        { ItemType.Coin, 90 }
+                        RoleTypeId = RoleTypeId.ClassD,
+                        KeepItems = false,
+                        Items = new Dictionary<ItemType, int>
+                        {
+                            { ItemType.KeycardScientist, 80 },
+                            { ItemType.GunCOM18, 40 },
+                            { ItemType.Painkillers, 100 },
+                            { ItemType.Coin, 100 }
+                        },
+                        Ammos = new Dictionary<ItemType, int>
+                        {
+                            { ItemType.Ammo9x19, 30 }
+                        }
+                    }
+                },
+                {
+                    "OwnerScientist", new RoleInventory
+                    {
+                        RoleTypeId = RoleTypeId.Scientist,
+                        KeepItems = true,
+                        Items = new Dictionary<ItemType, int>
+                        {
+                            { ItemType.GunCOM18, 65 },
+                            { ItemType.SCP500, 70 },
+                            { ItemType.Flashlight, 100 },
+                            { ItemType.Coin, 90 }
+                        },
+                        Ammos = new Dictionary<ItemType, int>
+                        {
+                            { ItemType.Ammo9x19, 60 }
+                        }
                     }
                 }
             }
-        };
+        }
+    };
+}
 
-        [Description("Custom inventory list for players with a rank")]
-        public Dictionary<string, Dictionary<string, RoleInventory>> InventoryRank { get; set; } = new Dictionary<string, Dictionary<string, RoleInventory>>()
-        {
-            {
-                "owner", new Dictionary<string, RoleInventory>()
-                {
-                    {
-                        "OwnerCassD", new RoleInventory()
-                        {
-                            RoleTypeId = RoleTypeId.ClassD,
-                            KeepItems = false,
-                            Items = new Dictionary<ItemType, int>()
-                            {
-                                { ItemType.KeycardScientist, 80 },
-                                { ItemType.GunCOM18, 40 },
-                                { ItemType.Painkillers, 100 },
-                                { ItemType.Coin, 100 }
-                            },
-                            Ammos = new Dictionary<ItemType, int>()
-                            {
-                                { ItemType.Ammo9x19, 30 }
-                            }
-                        }
-                    },
-                    {
-                        "OwnerScientist", new RoleInventory()
-                        {
-                            RoleTypeId = RoleTypeId.Scientist,
-                            KeepItems = true,
-                            Items = new Dictionary<ItemType, int>()
-                            {
-                                { ItemType.GunCOM18, 65 },
-                                { ItemType.SCP500, 70 },
-                                { ItemType.Flashlight, 100 },
-                                { ItemType.Coin, 90 }
-                            },
-                            Ammos = new Dictionary<ItemType, int>()
-                            {
-                                { ItemType.Ammo9x19, 60 }
-                            }
-                        }
-                    }
-                }
-            }
-        };
-    }
-
-    public class RoleInventory
-    {
-        public RoleTypeId RoleTypeId { get; set; }
-        public bool KeepItems { get; set; }
-        public bool KeepAmmos { get; set; }
-        public Dictionary<ItemType, int> Items { get; set; }
-        public Dictionary<ItemType, int> Ammos { get; set; }
-    }
+public class RoleInventory
+{
+    public RoleTypeId RoleTypeId { get; set; }
+    public bool KeepItems { get; set; }
+    public bool KeepAmmos { get; set; }
+    public Dictionary<ItemType, int> Items { get; set; }
+    public Dictionary<ItemType, int> Ammos { get; set; }
 }
