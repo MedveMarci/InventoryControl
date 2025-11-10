@@ -4,6 +4,7 @@
 <a href="https://github.com/KenleyundLeon/DeltaPatch"><img src="https://image2url.com/images/1759565889245-ff2e02c2-1f19-4f72-bc06-43a3b77fb4bd.png"></a>
 
 An SCP: Secret Laboratory plugin which allows you to configure the default role inventory.
+
 Original plugin: https://github.com/MrAfitol/InventoryControl
 
 ## How download ?
