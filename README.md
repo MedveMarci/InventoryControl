@@ -21,7 +21,7 @@ Original plugin: https://github.com/MrAfitol/InventoryControl
 ```yml
 # Custom inventory list for the role. (Do not add a role to the list if you want to leave the role as a regular inventory)
 inventory:
-  DefaultCassD:
+  DefaultClassD:
     role_type_id: ClassD
     keep_items: false
     keep_ammos: false
@@ -29,7 +29,7 @@ inventory:
       Painkillers: 80
       Coin: 100
     ammos: 
-  JanitorCassD:
+  JanitorClassD:
     role_type_id: ClassD
     keep_items: false
     keep_ammos: false
@@ -49,7 +49,7 @@ inventory:
 # Custom inventory list for players with a rank
 inventory_rank:
   owner:
-    OwnerCassD:
+    OwnerClassD:
       role_type_id: ClassD
       keep_items: false
       keep_ammos: false
