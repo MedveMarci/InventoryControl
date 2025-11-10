@@ -19,6 +19,8 @@ public class InventoryControl : Plugin<Config>
 
     public override Version RequiredApiVersion { get; } = new(LabApiProperties.CompiledVersion);
     
+    public string githubRepo = "MedveMarci/InventoryControl";
+    
     public override void Enable()
     {
         Instance = this;
