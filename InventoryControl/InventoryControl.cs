@@ -7,7 +7,7 @@ namespace InventoryControl;
 
 public class InventoryControl : Plugin<Config>
 {
-    public static InventoryControl Instance { get; private set; }
+    public static InventoryControl Singleton { get; private set; }
 
     public override string Name => "InventoryControl";
 
@@ -15,7 +15,7 @@ public class InventoryControl : Plugin<Config>
 
     public override string Author => "MrAfitol & MedveMarci";
 
-    public override Version Version { get; } = new(1, 0, 0);
+    public override Version Version { get; } = new(1, 0, 1);
 
     public override Version RequiredApiVersion { get; } = new(LabApiProperties.CompiledVersion);
     
@@ -23,7 +23,7 @@ public class InventoryControl : Plugin<Config>
     
     public override void Enable()
     {
-        Instance = this;
+        Singleton = this;
         PlayerEvents.ChangedRole += EventsHandler.OnPlayerChangedRole;
         ServerEvents.RoundStarted += EventsHandler.OnServerRoundStarted;
     }
@@ -32,6 +32,6 @@ public class InventoryControl : Plugin<Config>
     {
         PlayerEvents.ChangedRole -= EventsHandler.OnPlayerChangedRole;
         ServerEvents.RoundStarted -= EventsHandler.OnServerRoundStarted;
-        Instance = null;
+        Singleton = null;
     }
 }
