@@ -15,7 +15,7 @@ public class InventoryControl : Plugin<Config>
 
     public override string Author => "MrAfitol & MedveMarci";
 
-    public override Version Version { get; } = new(1, 0, 1);
+    public override Version Version { get; } = new(1, 0, 2);
 
     public override Version RequiredApiVersion { get; } = new(LabApiProperties.CompiledVersion);
     
@@ -25,13 +25,13 @@ public class InventoryControl : Plugin<Config>
     {
         Singleton = this;
         PlayerEvents.ChangedRole += EventsHandler.OnPlayerChangedRole;
-        ServerEvents.RoundStarted += EventsHandler.OnServerRoundStarted;
+        ServerEvents.WaitingForPlayers += EventsHandler.OnServerWaitingForPlayer;
     }
 
     public override void Disable()
     {
         PlayerEvents.ChangedRole -= EventsHandler.OnPlayerChangedRole;
-        ServerEvents.RoundStarted -= EventsHandler.OnServerRoundStarted;
+        ServerEvents.WaitingForPlayers -= EventsHandler.OnServerWaitingForPlayer;
         Singleton = null;
     }
 }

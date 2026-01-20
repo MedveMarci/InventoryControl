@@ -15,7 +15,7 @@ namespace InventoryControl;
 
 public static class EventsHandler
 {
-    public static void OnServerRoundStarted()
+    public static void OnServerWaitingForPlayer()
     {
         ApiManager.CheckForUpdates();
     }
