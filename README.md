@@ -1,4 +1,5 @@
 # InventoryControl
+
 [![Version](https://img.shields.io/github/v/release/MedveMarci/InventoryControl?sort=semver&label=Version)](https://github.com/MedveMarci/InventoryControl/releases)
 [![Downloads](https://img.shields.io/github/downloads/MedveMarci/InventoryControl/total?label=Downloads)](https://github.com/MedveMarci/InventoryControl/releases)
 <a href="https://github.com/KenleyundLeon/DeltaPatch"><img src="https://image2url.com/images/1759565889245-ff2e02c2-1f19-4f72-bc06-43a3b77fb4bd.png"></a>
@@ -8,13 +9,16 @@ An SCP: Secret Laboratory plugin which allows you to configure the default role 
 Original plugin: https://github.com/MrAfitol/InventoryControl
 
 ## How download ?
-   - *1. Find the SCP SL server config folder*
-   
-   *("C:\Users\(user name)\AppData\Roaming\SCP Secret Laboratory\" for windows, "/home/(user name)/.config/SCP Secret Laboratory/" for linux)*
-  
-   - *2. Find the "LabAPI" folder there, it contains the "plugins" folder.*
-  
-   - *3. Select either the port of your server to install the same on that server or the "global" folder to install the plugin for all servers*
+
+- *1. Find the SCP SL server config folder*
+
+*("C:\Users\(user name)\AppData\Roaming\SCP Secret Laboratory\" for windows, "/home/(user name)/.config/SCP Secret
+Laboratory/" for linux)*
+
+- *2. Find the "LabAPI" folder there, it contains the "plugins" folder.*
+
+- *3. Select either the port of your server to install the same on that server or the "global" folder to install the
+  plugin for all servers*
 
 ## Config
 
@@ -73,7 +77,6 @@ inventory_rank:
         Ammo9x19: 60
 ```
 
-
 ```
 InventoryName:
    role_type_id: RoleType
@@ -100,6 +103,7 @@ RankName:
 ## Types
 
 **RoleType**
+
 ```
 Scp173,
 ClassD,
@@ -124,6 +128,7 @@ ChaosMarauder
 ```
 
 **ItemType**
+
 ```
 KeycardJanitor
 KeycardScientist

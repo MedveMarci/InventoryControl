@@ -17,9 +17,9 @@ public static class EventsHandler
 {
     public static void OnServerWaitingForPlayer()
     {
-        ApiManager.CheckForUpdates();
+        VersionManager.CheckForUpdates();
     }
-    
+
     public static void OnPlayerChangedRole(PlayerChangedRoleEventArgs ev)
     {
         try
@@ -148,7 +148,8 @@ public static class EventsHandler
 
     private static bool IsAmmo(ItemType type)
     {
-        return type is ItemType.Ammo9x19 or ItemType.Ammo762x39 or ItemType.Ammo556x45 or ItemType.Ammo44cal or ItemType.Ammo12gauge;
+        return type is ItemType.Ammo9x19 or ItemType.Ammo762x39 or ItemType.Ammo556x45 or ItemType.Ammo44cal
+            or ItemType.Ammo12gauge;
     }
 
     private static bool EqualsTo(UserGroup check, UserGroup player)

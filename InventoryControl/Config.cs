@@ -8,7 +8,7 @@ public class Config
 {
     [Description("Enable debug messages in the console")]
     public bool Debug { get; set; } = false;
-    
+
     [Description(
         "Custom inventory list for the role. (Do not add a role to the list if you want to leave the role as a regular inventory)")]
     public Dictionary<string, RoleInventory> Inventory { get; set; } = new()
